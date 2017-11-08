@@ -965,7 +965,7 @@ subjects:
 ```
 Then run the command below to create the necessary roles and role bindings
 ```
-kubectl create -f rbac-config.yaml
+kubectl create -f tiller-rbac.yaml
 ```
 
 Now that the service account is available and the necessary roles are added, you are ready to initialize _helm_
@@ -975,7 +975,7 @@ helm init --service-account tiller
 
 > __Note:__ You can find more details about this configuration at: https://github.com/kubernetes/helm/blob/master/docs/service_accounts.md
 
-Now if you examine the _pods_ (`kubectl get pods`), you will notice a new _tiller_ pod
+Now if you examine the _pods_ (`kubectl get pods -n kube-system`), you will notice a new _tiller_ pod
 
 By default _helm_ is connected to the official stable repository. We can deploy a simple _chart_ to just familiarize ourselves with it
 
