@@ -1,0 +1,24 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: api-in-file
+  labels:
+    app: api-in-file
+    appvariant: filebased
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api-in-file
+      appvariant: filebased
+  template:
+    metadata:
+      labels:
+        app: api-in-file
+        appvariant: filebased
+    spec:
+      containers:
+      - name: api-in-file
+        image: sgdpro/sample-app:in-file
+        ports:
+        - containerPort: 3080

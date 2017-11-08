@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: counts
+  namespace: mydev
+spec:
+  hard:
+    pods: "1"

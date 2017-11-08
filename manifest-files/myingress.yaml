@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: mynginx
+spec:
+  rules:
+  - host: mynginx.192.168.99.100.nip.io
+    http:
+      paths:
+      - backend:
+          serviceName: mynginx
+          servicePort: 80
+

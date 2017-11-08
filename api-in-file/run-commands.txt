@@ -1,0 +1,19 @@
+# build
+cd /Users/serjik/work/Dev/LearnKubernetes/sampleApp
+docker build -t sgdpro/sample-app:in-mem .
+docker build -t sgdpro/sample-app:in-file .
+docker build -t sgdpro/sample-client-app .
+
+# run the the sample containers
+docker run --rm --name appfile -d -p 3080:3080 sgdpro/sample-app:in-mem
+docker run --rm --name appfile -d -p 3080:3080 sgdpro/sample-app:in-file
+
+docker volume create books-storage
+docker run --rm --name appfile -d -p 3080:3080 -v books-storage:/usr/src/data sgdpro/sample-app:in-file
+
+docker run --rm --name appclient -d -p 3081:3081 --link 9a1d02cd167d -e "API_HOST=9a1d02cd167d" -e "API_PORT=3080" sgdpro/sample-client-app
+
+
+# post books
+curl -X GET http://localhost:3080/books
+curl -X POST http://localhost:3080/books -H "Content-Type: application/json" -H "Conent-type: application/json" -d '{"name": "book3", "author": "smith"}'

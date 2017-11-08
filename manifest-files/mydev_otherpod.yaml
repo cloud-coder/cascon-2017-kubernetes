@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: otherpod
+  namespace: mydev
+spec:
+  containers:
+  - image: nginx
+    name: nginx

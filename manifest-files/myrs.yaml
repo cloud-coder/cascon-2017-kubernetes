@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: ReplicaSet
+metadata:
+  name: myrs
+spec:
+  replicas: 3 
+  selector:
+    matchLabels:
+      appvariant: blue 
+  template:
+    metadata:
+      name: mynginxpod
+      namespace: default
+      labels:
+        appvariant: blue
+    spec:
+      containers:
+      - image: nginx
+        name: mynginx

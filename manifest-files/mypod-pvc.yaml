@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hostpathpod
+spec:
+  containers:
+  - image: busybox
+    name: busybox
+    command:
+    - sleep
+    - "3600"
+    volumeMounts:
+    - mountPath: /mypath
+      name: myvol
+  volumes:
+  - name: myvol
+    persistentVolumeClaim:
+      claimName: myclaim
