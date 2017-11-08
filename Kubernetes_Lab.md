@@ -197,7 +197,7 @@ minikube logs
 ## <a id="manifests"></a>Manifests
 Kubernetes uses manifest files to capture the definitions of various Kubernetes objects, like _pods_, _services_...
 
-Let's create a _pod_ using a manifest. Save the following content in a file called `mypod.yaml`. You can also find the file in repository at `manifest-files/mypod.yaml` path.
+Let's create a _pod_ using a manifest. Save the following content in a file called `mypod.yaml`. You can also find the file in the repository at `manifest-files/mypod.yaml` path.
 
 ```yaml
 apiVersion: v1
@@ -234,7 +234,7 @@ To do this, we can run the command below
 kubectl get pods mypod -o yaml
 ```
 
-> __Tip:__ for all such commands that show large content on the console, if you are interested in just viewing the content no clutter up your console, you can pipe the results in `less` or `more` to simplify viewing, like so: `kubectl get pods mypod -o yaml | less`
+> __Tip:__ for all such commands that show large content on the console, if you are interested in just viewing the content and do not like to clutter up your console, you can pipe (`|`) the results into `less` or `more` to simplify viewing, like so: `kubectl get pods mypod -o yaml | less`
 
 It is also possible to use a json format instead of yaml format
 ```
@@ -242,6 +242,8 @@ kubectl get pod mypod -o json | jq -r .spec
 kubectl get pods -o json | jq -r .items[].spec
 kubectl get pods -o json | jq -r .items[1].spec
 ```
+
+> __Note:__ we are using `jq` which can be found here: https://stedolan.github.io/jq/
 
 If you are trying to find the API URL for an object, like the _pod_ that we just created, you can get it by running the following command and finding the API URL in the returned details
 ```
@@ -328,9 +330,9 @@ Now let's delete the _pod_ in the _default_ _namespace_
 kubectl delete pods mypod
 ```
 
-> __Tip:__ if you were planning to delete the _pod_ in the _mydev_ _namespace_, you would have used the `-n` switch to pass the _mydev_ _namespace_ to the command.
+> __Tip:__ if you were planning to delete the _pod_ in the _mydev_ _namespace_, you would have used the `-n` (or `--namespace`) switch to pass the _mydev_ _namespace_ to the command.
 
-> __Note:__ not everything is in a namespace: namespaces themselves and other low-level resouces like _node_s and persistent volumes are not in a namespace
+> __Note:__ not everything is in a namespace: namespaces themselves and other low-level resouces like _nodes_ and persistent volumes are not in a namespace
 
 ## <a id="policies"></a>Policies
 You can use policies to enforce certain conditions and criteria. These can be restriction on network communication, for example block traffic between _namespaces_. Or you can define resource quotas.
@@ -416,14 +418,14 @@ Use the above file and create the deployment:
 kubectl create -f mydeployment.yaml
 ```
 
-> __Labels:__ unique key value pairs added to an object that mean something to the user, and are used to group or select resources. They have to be simple values, and mean something. If you have information that doesn't identify/classify (e.g. just information), then use _annotation_s. You can use _equality based_ `=`, `==` or `!=` or _set based_ check like `in`, `notin` and just use the key (`mykey` or `!mykey`), an example of a set based label can be `mykey in (val1, val2)`
+> __Labels:__ unique key value pairs added to an object that mean something to the user, and are used to group or select resources. They have to be simple values, and mean something. If you have information that doesn't identify/classify (e.g. just information), then use *annotations*. You can use _equality based_ `=`, `==` or `!=` or _set based_ check like `in`, `notin` and just use the key (`mykey` or `!mykey`), an example of a set based label can be `mykey in (val1, val2)`
 
 One of the things that a _replicaset_ is responsible for is to find the _pods_ that match a specific label, and make sure that the desired count matches the observed count in the cluster. If there is a discripancy, then it will either add or terminate _pods_ to make the state consistent (i.e. desired to be same as observed).
 
 So in the above _deployment_, you can see that we are defining the following:
 - we want 3 replicas or instances of this _pod_
 - a label selector for `appvariant=filebased`
-- a _pod_ definition that is based on an our api sample image with a different tag
+- a _pod_ definition that is based on our api sample image with a different tag
 - the _pod_ in this _replicaset_ defines a label as `appvariant: filebased`
 
 Let's examine what got created
@@ -433,22 +435,22 @@ kubectl get pods --show-labels
 ```
 So as you can see from the output of the `get pods` command above, we have three _pods_ that have the `appvariant=filebased` label.
 
-Now check the _replicaset_s:
+Now check the _replicasets_:
 ```
 kubectl get rs
 ```
-Similar to _pods_, we have 3 _replicaset_s
+Similar to _pods_, we have 3 _replicasets_
 
-Now check the _deployment_s:
+Now check the _deployments_:
 ```
 kubectl get deployments
 ```
 
-To demonstrate how the _deployment_s, through the help of the controller manager, ensure that the desired and observed states match, we will change the label of one the _pods_ and watch how Kubernetes starts a new _pod_ to ensure that we always have the expected 3 _pods_ as defined by the replica count
+To demonstrate how the _deployments_, through the help of the controller manager, ensure that the desired and observed states match, we will change the label of one the _pods_ and watch how Kubernetes starts a new _pod_ to ensure that we always have the expected 3 _pods_ as defined by the replica count
 
 Since this is an experiment for demo purposes, we will directly update the manifest of the _pod_ on the fly.
 Choose the name of the one of the _pods_ from the earlier `get pods` command, and update the label by changing the `appvariant: filebased` to `appvariant: memorybased`.
-You could do this in two ways, one option is to use the `kubectl edit pod <pod_inst_name> -o yaml`, which will open the manifest in `vi`, and change the label from blue to green, and save and exist `vi`, or the other simpler option is to use the following command (replace the _pod_ name with one of your _pod_ names)
+You could do this in two ways, one option is to use the `kubectl edit pod <pod_inst_name> -o yaml`, which will open the manifest in `vi`, and change the label from memorybased to filebased, and save and exist `vi`, or the other simpler option is to use the following command (replace the _pod_ name with one of your _pod_ names)
 ```
 kubectl label pod api-in-file-1358977376-0wcxq appvariant=memorybased --overwrite
 ```
@@ -484,7 +486,7 @@ To see the rollout status, run:
 kubectl rollout status deployment/api-in-file
 ```
 
-> __Note:__ the CHANGE-CAUSE column currently shows _<none>_, if you want it to be something meaningful, you either use the --record option on the `run` command, or you can annotate the object. Any object can be annotated. For example I could annotate the above _deployment_ using a command like `kubectl annotate deployment api-in-file kubernetes.io/change-cause="My new annotation"`. To verify, use `kubectl rollout history deployment api-in-file` command see the change cause updated
+> __Note:__ the CHANGE-CAUSE column currently shows **<none>**, if you want it to be something meaningful, you either use the --record option on the `run` command, or you can annotate the object. Any object can be annotated. For example I could annotate the above _deployment_ using a command like `kubectl annotate deployment api-in-file kubernetes.io/change-cause="My new annotation"`. To verify, use `kubectl rollout history deployment api-in-file` command see the change cause updated
 
 ## <a id="services"></a>Services
 So far we have deployed our application and scaled it, and saw how Kubernetes maintains the desired count of the running applications.
@@ -861,7 +863,7 @@ kubectl exec -ti myvolpod -c busy2 -- ls -l /mypath2
 ### Decoupling Volume Decisions (dev to prod)
 Not all decisions can be made at development time. For example we can't decide on the _volume_ type at dev time and put in the manifest. The final solution can run in a public cloud provider or maybe even in house. To address this there are two objects: Persistent Volume Claim (_pvc_) and Persistent Volumes (_pv_).
 
-At development time, the developer only makes a claim using _pvc_ that the app needs a _volume_ of a particular size (e.g. 100MB or 10GB), and at deployment time, the operations team can define _pv_s that would be used by the _pvc_s defined by the development team. Sometimes this can be done in an automatic fashion, like what happens in _minikube_ when you create a _pvc_, a corresponding _pv_ gets created using `hostPath` as the volume type.
+At development time, the developer only makes a claim using _pvc_ that the app needs a _volume_ of a particular size (e.g. 100MB or 10GB), and at deployment time, the operations team can define _pvs_ that would be used by the _pvcs_ defined by the development team. Sometimes this can be done in an automatic fashion, like what happens in _minikube_ when you create a _pvc_, a corresponding _pv_ gets created using `hostPath` as the volume type.
 
 If we run the following commands, _minikube_ reports that there are no resources
 ```
@@ -929,7 +931,7 @@ Helm is a package manager, and the packages/modules are called charts. https://g
 
 An easier way of defining an entire solution with all its parts and Kubernetes objects that need to be created.
 
-You need to parts to enable the usage of _Helm_
+You need two parts to enable the usage of _Helm_
 - `helm` is the client portion that runs from where you run `kubectl`
 - `tiller` is the server portion that runs in a _pod_ in your cluster
 
