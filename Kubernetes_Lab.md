@@ -57,7 +57,7 @@ The following are the fundamental objects that we will look at in this tutorial.
 - _Pod_: smallest unit that represents a running process in your cluster. A _pod_ is a group of one or more containers, with shared storage/network, and a specification for how to run the containers (like an application-specific logical host). A Controller can create and manage multiple Pods, handling replication, rollout and self-healing at cluster scope (e.g. Deployment, SteatefulSet, DaemonSet)
 - _Service_: an abstraction which defines a logical set of _Pods_ and a policy by which to access them (using label selectors)
 - _Volume_: to enable persistence storage for containers
-- _Namespace_: virtual clusters (_namespaces_) backed by the same physical cluster. Usefule with many users spread across multiple teams, or projects. A way to divide cluster resources between multiple uses (via resource quota). Use labels to distinguish resources within the same namespace
+- _Namespace_: virtual clusters (_namespaces_) backed by the same physical cluster. Useful with many users spread across multiple teams, or projects. A way to divide cluster resources for multiple uses (via resource quota). Use labels to distinguish resources within the same namespace
 
 We will also look at some of the higher-level objects like _Deployments_ and _ReplicaSets_
 
