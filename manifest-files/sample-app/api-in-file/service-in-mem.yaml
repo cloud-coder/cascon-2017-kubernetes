@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: api-in-file
+spec:
+  selector:
+    app: api-in-file
+  ports:
+  - protocol: TCP
+    port: 3080
+    targetPort: 3080

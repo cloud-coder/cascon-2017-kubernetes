@@ -20,6 +20,7 @@
   - [Secrets](#secrets)
   - [Volumes](#volumes)
 - [Helm](#helm)
+- [Optional SampleApp](#optional)
 
 
 # <a id="intro"></a>Introduction
@@ -1056,4 +1057,13 @@ You can find all the details here: https://github.com/kubernetes/charts/tree/mas
 For example you can override the service type and the default password by adding `--set serviceType=NodePort,wordpressPassword=mypassword`
 
 > __Note:__ This chart assumes that Persistent Volume provisioner support is available in the underlying infrastructure and Persistent Volume Claims will be acted on
+
+# <a id="optional"></a>Optional SampleApp
+You can also find samples in the `manifest-files/sample-app` for deploying the `api-in-mem`, `api-in-file` and `api-client` applications. The `api-client` application uses two enivronment variables to choose from where to serve the api call (e.g. either `api-in-mem` or `api-in-file`). The host name is the service name, and port number is the one assigned at deployment time (i.e. `3080`). The `api-client` app runs on port `3081` and calls the target api on `3080`.
+
+Before deploying the `api-in-file` app you will need to create the PVC referenced by it.
+
+Initially the client application is set to use the in memory variant of the api sample, you can either redeploy it to use the file variant or you can edit it in place just to see that it can access both services.
+
+You can either build these containers locally or access them from Docker hub at `sgdpro/sample-app:in-mem`, `sgdpro/sample-app:in-file` and `sgdpro/sample-client-app`
 

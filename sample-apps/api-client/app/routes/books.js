@@ -6,8 +6,15 @@ const request = require("request");
 console.log(`API host is ${envData.apiHost}`);
 console.log(`API port is ${envData.apiPort}`);
 
+const baseUrl = `http://${envData.apiHost}:${envData.apiPort}`
+
 function doProxy(req, res, routePath, method) {
-	request({method: method, uri: `http://${envData.apiHost}:${envData.apiPort}${routePath}`}, (remoteErr, remoteRes, remoteBody) => {
+	let requestOptions = {method: method, uri: `${baseUrl}${routePath}`};
+	if (method === "POST") {
+		requestOptions.json = true;
+		requestOptions.body = req.body;
+	}
+	request(requestOptions, (remoteErr, remoteRes, remoteBody) => {
 		if (remoteErr) {
 			res.status(500).send(`Couldn't ${method} books against server ${envData.apiHost} at port ${envData.apiPort}!`);
 		} else {

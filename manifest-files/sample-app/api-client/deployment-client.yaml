@@ -1,0 +1,29 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: api-client
+  labels:
+    app: api-client
+    appvariant: api-client
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api-client
+      appvariant: api-client
+  template:
+    metadata:
+      labels:
+        app: api-client
+        appvariant: api-client
+    spec:
+      containers:
+      - name: api-client
+        image: sgdpro/sample-client-app
+        env:
+          - name: API_HOST
+            value: api-in-mem
+          - name: API_PORT
+            value: "3080"
+        ports:
+        - containerPort: 3081

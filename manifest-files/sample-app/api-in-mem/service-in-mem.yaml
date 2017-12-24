@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: api-in-mem
+spec:
+  selector:
+    app: api-in-mem
+  ports:
+  - protocol: TCP
+    port: 3080
+    targetPort: 3080

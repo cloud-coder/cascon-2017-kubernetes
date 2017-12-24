@@ -12,10 +12,10 @@ const middleware = require("./routes/generic-middleware");
 app.use(helmet());
 
 // parse json body, and set it to req.body
-app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.json({type: "*/*"})); // for parsing application/json
 
 // parse form body
-app.use(bodyParser.urlencoded({ extended: true})); // for parsing application/x-www-form-urlencoded
+// app.use(bodyParser.urlencoded({ extended: true})); // for parsing application/x-www-form-urlencoded
 
 // parse Cookie header and set req.cookies
 app.use(cookieParser());

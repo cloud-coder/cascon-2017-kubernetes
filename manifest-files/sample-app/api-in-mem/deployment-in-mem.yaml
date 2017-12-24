@@ -1,0 +1,24 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: api-in-mem
+  labels:
+    app: api-in-mem
+    appvariant: membased
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api-in-mem
+      appvariant: membased
+  template:
+    metadata:
+      labels:
+        app: api-in-mem
+        appvariant: membased
+    spec:
+      containers:
+        - name: api-in-mem
+          image: sgdpro/sample-app:in-mem
+          ports:
+            - containerPort: 3080

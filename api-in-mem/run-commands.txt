@@ -1,2 +1,0 @@
-# run the in memory sample
-docker run -d -p 3080:3080 sgdpro/sample-app:in-mem

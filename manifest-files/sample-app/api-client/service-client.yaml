@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: api-client
+spec:
+  selector:
+    app: api-client
+  ports:
+  - protocol: TCP
+    port: 3081
+    targetPort: 3081
+  type: NodePort
